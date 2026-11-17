@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Amigo Secreto</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; min-height: 100%; background: #000; color: #000; font-family: Arial, Helvetica, sans-serif; }
+    body { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px; }
+    #entry { min-height: 100vh; min-height: 100svh; width: 100%; display: grid; place-items: center; }
+    #start {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; min-width: min(290px, 85vw); min-height: 150px; padding: 28px 42px;
+      border: 0; border-radius: 4px; background: #fff; color: #000; cursor: pointer;
+      font-weight: 700; text-align: center;
+    }
+    #start .title { font-size: clamp(1.5rem, 5vw, 2rem); }
+    #start .action { font-size: 1rem; letter-spacing: .18em; }
+    #game { display: none; position: fixed; inset: 0; width: 100%; height: 100%; background: #000; }
+    #game iframe { display: block; width: 100%; height: 100%; border: 0; background: #000; }
+    #hint { display:none; position: fixed; z-index: 5; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 12px; border-radius: 6px; background: #222e; color: #fff; text-align: center; font-size: 12px; }
+    #hint a { color: #fff; }
+    :fullscreen { background: #000; }
+  </style>
+</head>
+<body>
+  <main id="entry">
+    <button id="start" type="button" aria-label="Entrar no Amigo Secreto">
+      <span class="title">Amigo Secreto</span>
+      <span class="action">ENTRAR</span>
+    </button>
+  </main>
+
+  <main id="game" aria-label="Amigo Secreto">
+    <iframe id="genially"
+      src="https://view.genially.com/6afaeb38eadf883f5ded4e97"
+      title="Amigo Secreto — Genially"
+      allow="fullscreen; autoplay"
+      allowfullscreen
+      webkitallowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </main>
+  <div id="hint">Se o ecrã inteiro não ativar automaticamente, usa o botão de ecrã inteiro do Genially. No iPhone, o Safari pode limitar o fullscreen incorporado.</div>
+
+  <script>
+    const start = document.getElementById('start');
+    const entry = document.getElementById('entry');
+    const game = document.getElementById('game');
+    const frame = document.getElementById('genially');
+    const hint = document.getElementById('hint');
+
+    start.addEventListener('click', async () => {
+      entry.style.display = 'none';
+      game.style.display = 'block';
+      hint.style.display = 'block';
+
+      // Solicitar fullscreen diretamente no gesto do utilizador.
+      try {
+        if (game.requestFullscreen) {
+          await game.requestFullscreen();
+        } else if (game.webkitRequestFullscreen) {
+          game.webkitRequestFullscreen();
+        } else if (frame.webkitEnterFullscreen) {
+          frame.webkitEnterFullscreen();
+        }
+      } catch (err) {
+        // Mantém o jogo visível mesmo quando o browser bloqueia fullscreen.
+      }
+    });
+  </script>
+</body>
+</html>
